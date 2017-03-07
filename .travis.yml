@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - '4.3.0'
+after_install:
+  - (cd lambda/hello-world/ && npm install --production)
+after_success:
+  - npm run test
+deploy:
+  - provider: script
+    script: node scripts/aws-lambda-deploy.js zuora-mooc-usage production
+    skip_cleanup: true
+    on:
+      branch: master
