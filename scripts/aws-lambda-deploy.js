@@ -16,7 +16,7 @@ if (!lambdaAlias) {
 }
 
 const lambda = new AWS.Lambda({
-  region: 'eu-west-1'
+  region: 'us-west-2'
 });
 
 const lambdaUpdateFunctionCode = Promise.promisify(lambda.updateFunctionCode.bind(lambda));
