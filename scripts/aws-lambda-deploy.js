@@ -40,28 +40,28 @@ execCommand(zipLambdaCommand)
   console.log('Uploading code to lambda with params:', lambdaUpdateFunctionCodeParams);
   return lambdaUpdateFunctionCode(lambdaUpdateFunctionCodeParams);
 })
-.then(lambdaData => {
-  const lambdaVersion = lambdaData.Version;
-  console.log('Lambda code uploaded with version', lambdaVersion);
-  const lambdaUpdateAliasParams = {
-    FunctionName: `${lambdaName}`,
-    Name: lambdaAlias,
-    FunctionVersion: lambdaVersion
-  };
-  console.log(`Updating alias ${lambdaAlias} for lambda ${lambdaName}`);
-  return lambdaUpdateAlias(lambdaUpdateAliasParams);
-})
-.then(lambdaAliasData => {
-  console.log('Lambda alias deployed with data', lambdaAliasData);
-  const lambdaAddPermissionParams = {
-    Action: 'lambda:InvokeFunction',
-    FunctionName: `${lambdaName}:${lambdaAlias}`,
-    Principal: 'apigateway.amazonaws.com',
-    StatementId: `ID-${lambdaAlias}-${new Date().getTime()}`
-  };
-  console.log(`Setting permission for lambda ${lambdaName} with alias ${lambdaAlias}`);
-  return lambdaAddPermission(lambdaAddPermissionParams);
-})
+// .then(lambdaData => {
+//   const lambdaVersion = lambdaData.Version;
+//   console.log('Lambda code uploaded with version', lambdaVersion);
+//   const lambdaUpdateAliasParams = {
+//     FunctionName: `${lambdaName}`,
+//     Name: lambdaAlias,
+//     FunctionVersion: lambdaVersion
+//   };
+//   console.log(`Updating alias ${lambdaAlias} for lambda ${lambdaName}`);
+//   return lambdaUpdateAlias(lambdaUpdateAliasParams);
+// })
+// .then(lambdaAliasData => {
+//   console.log('Lambda alias deployed with data', lambdaAliasData);
+//   const lambdaAddPermissionParams = {
+//     Action: 'lambda:InvokeFunction',
+//     FunctionName: `${lambdaName}:${lambdaAlias}`,
+//     Principal: 'apigateway.amazonaws.com',
+//     StatementId: `ID-${lambdaAlias}-${new Date().getTime()}`
+//   };
+//   console.log(`Setting permission for lambda ${lambdaName} with alias ${lambdaAlias}`);
+//   return lambdaAddPermission(lambdaAddPermissionParams);
+// })
 .then(() => {
   console.log('Permission setted');
   console.log('Deployment done');
