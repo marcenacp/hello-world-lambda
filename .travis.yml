@@ -7,7 +7,7 @@ after_success:
   - npm run test
 deploy:
   - provider: script
-    script: node scripts/aws-lambda-deploy.js hello-world production
+    script: node scripts/aws-lambda-deploy.js hello-world
     skip_cleanup: true
     on:
       branch: master

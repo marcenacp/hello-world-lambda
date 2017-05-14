@@ -9,19 +9,11 @@ if (!lambdaName) {
   process.exit(1);
 }
 
-const lambdaAlias = process.argv[3];
-if (!lambdaAlias) {
-  console.error('Error: missing lambda alias.');
-  process.exit(1);
-}
-
 const lambda = new AWS.Lambda({
   region: 'us-west-2'
 });
 
 const lambdaUpdateFunctionCode = Promise.promisify(lambda.updateFunctionCode.bind(lambda));
-const lambdaUpdateAlias = Promise.promisify(lambda.updateAlias.bind(lambda));
-const lambdaAddPermission = Promise.promisify(lambda.addPermission.bind(lambda));
 const execCommand = Promise.promisify(exec);
 
 const cwd = process.cwd();
@@ -40,30 +32,9 @@ execCommand(zipLambdaCommand)
   console.log('Uploading code to lambda with params:', lambdaUpdateFunctionCodeParams);
   return lambdaUpdateFunctionCode(lambdaUpdateFunctionCodeParams);
 })
-// .then(lambdaData => {
-//   const lambdaVersion = lambdaData.Version;
-//   console.log('Lambda code uploaded with version', lambdaVersion);
-//   const lambdaUpdateAliasParams = {
-//     FunctionName: `${lambdaName}`,
-//     Name: lambdaAlias,
-//     FunctionVersion: lambdaVersion
-//   };
-//   console.log(`Updating alias ${lambdaAlias} for lambda ${lambdaName}`);
-//   return lambdaUpdateAlias(lambdaUpdateAliasParams);
-// })
-// .then(lambdaAliasData => {
-//   console.log('Lambda alias deployed with data', lambdaAliasData);
-//   const lambdaAddPermissionParams = {
-//     Action: 'lambda:InvokeFunction',
-//     FunctionName: `${lambdaName}:${lambdaAlias}`,
-//     Principal: 'apigateway.amazonaws.com',
-//     StatementId: `ID-${lambdaAlias}-${new Date().getTime()}`
-//   };
-//   console.log(`Setting permission for lambda ${lambdaName} with alias ${lambdaAlias}`);
-//   return lambdaAddPermission(lambdaAddPermissionParams);
-// })
-.then(() => {
-  console.log('Permission setted');
+.then(lambdaData => {
+  const lambdaVersion = lambdaData.Version;
+  console.log('Lambda code uploaded with version', lambdaVersion);
   console.log('Deployment done');
   return;
 })
