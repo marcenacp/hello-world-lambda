@@ -11,3 +11,8 @@ deploy:
     skip_cleanup: true
     on:
       branch: master
+  - provider: script
+    script: node scripts/aws-lambda-deploy.js hello-world staging
+    skip_cleanup: true
+    on:
+      branch: develop

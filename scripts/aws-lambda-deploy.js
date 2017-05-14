@@ -9,11 +9,18 @@ if (!lambdaName) {
   process.exit(1);
 }
 
+const lambdaAlias = process.argv[3];
+if (!lambdaAlias) {
+  console.error('Error: missing lambda alias.');
+  process.exit(1);
+}
+
 const lambda = new AWS.Lambda({
   region: 'us-west-2'
 });
 
 const lambdaUpdateFunctionCode = Promise.promisify(lambda.updateFunctionCode.bind(lambda));
+const lambdaUpdateAlias = Promise.promisify(lambda.updateAlias.bind(lambda));
 const execCommand = Promise.promisify(exec);
 
 const cwd = process.cwd();
@@ -35,6 +42,16 @@ execCommand(zipLambdaCommand)
 .then(lambdaData => {
   const lambdaVersion = lambdaData.Version;
   console.log('Lambda code uploaded with version', lambdaVersion);
+  const lambdaUpdateAliasParams = {
+    FunctionName: `${lambdaName}`,
+    Name: lambdaAlias,
+    FunctionVersion: lambdaVersion
+  };
+  console.log(`Updating alias ${lambdaAlias} for lambda ${lambdaName}`);
+  return lambdaUpdateAlias(lambdaUpdateAliasParams);
+})
+.then(lambdaAliasData => {
+  console.log('Lambda alias deployed with data', lambdaAliasData);
   console.log('Deployment done');
   return;
 })
