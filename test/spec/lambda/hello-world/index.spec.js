@@ -7,7 +7,7 @@ describe('handler', () => {
     helloWorld.handler(null, null, (error, result) => {
       chai.expect(result).to.deep.equal({
         Hello: 'World',
-        This: 'is production'
+        This: 'is staging'
       });
       done();
     });
