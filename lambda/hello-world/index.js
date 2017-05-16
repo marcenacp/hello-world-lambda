@@ -1,5 +1,6 @@
 exports.handler = (event, context, callback) => {
   callback(null, {
-    Hello: 'World'
+    Hello: 'World',
+    This: 'is production'
   });
 };
